@@ -1,0 +1,59 @@
+<html>
+<script src="socket.io-1.3.5.js"></script>
+<center>
+<h3>Socket.io chat</h3>
+<div id="content" style="background-color:GhostWhite  ;"></div>
+<hr>
+<div id="message" style="background-color:yellow;" contenteditable="true">
+</div>
+<hr>
+<button id="send">Send</button>
+</center>
+
+
+<script>
+
+window.onload = function() {
+ 
+    var messages = [];
+    var socket = io.connect('http://ui-socket.herokuapp.com');
+    var field = document.getElementById("field");
+    var sendButton = document.getElementById("send");
+    var content = document.getElementById("content");
+    var message = document.getElementById("message");
+	
+	message.focus();
+	
+    socket.on('message', function (data) {
+        if(data.message) {
+            messages.push(data.message);
+            var html = '';
+            for(var i=0; i<messages.length; i++) {
+                html += messages[i] + '<hr>';
+            }
+            content.innerHTML = html;
+        } else {
+            console.log("There is a problem:", data);
+        }
+    });
+ 
+	message.onkeyup = function(e){
+		if(e.keyCode == 13) {
+            sendMessage();
+        }
+	}
+	
+    sendButton.onclick = sendMessage;
+	
+	function sendMessage() {
+        var text = message.innerHTML;
+        socket.emit('send', { message: text });
+		message.innerHTML = '';
+    };
+ 
+}
+	
+</script>
+</html
+ 
+          
