@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "socket.io": "latest",
+    "express": "latest",
+    "body-parser": "latest"
+  }
+}

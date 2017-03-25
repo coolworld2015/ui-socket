@@ -1,0 +1,62 @@
+<html>
+    <META name=viewport content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> 
+<center>
+	<h3>WebSocket Chat</h3>
+	<div id="content" style="background-color:GhostWhite">
+	</div>
+	<hr>
+	<div id="message" style="background-color:yellow" contenteditable="true">
+	</div>
+	<hr>
+	<button id="send">
+		Send
+	</button>
+</center>
+
+
+<script>
+
+window.onload = function() {
+    var messages = [];
+	var socket = new WebSocket("wss://ui-socket.herokuapp.com/");
+	
+    var field = document.getElementById("field");
+    var sendButton = document.getElementById("send");
+    var content = document.getElementById("content");
+    var message = document.getElementById("message");
+	
+	message.focus();
+	
+	socket.onmessage = function(event) {
+		var incomingMessage = event.data;
+        if (incomingMessage) {
+            messages.push(incomingMessage);
+            var html = '';
+            for(var i=0; i < messages.length; i++) {
+                html += messages[i] + '<hr>';
+            }
+            content.innerHTML = html;
+        } else {
+            console.log("There is a problem:", data);
+        }
+	};
+
+	message.onkeyup = function(e){
+		if(e.keyCode == 13) {
+            sendMessage();
+        }
+	}
+	
+    sendButton.onclick = sendMessage;
+	
+	function sendMessage() {
+        var text = message.innerHTML;
+		socket.send(text);
+		message.innerHTML = '';
+    };
+}
+	
+</script>
+</html
+ 
+          
