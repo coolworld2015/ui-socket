@@ -23,7 +23,7 @@ webSocketServer.on('connection', (ws) => {
 	clients[id] = ws;
 	console.log('new connection ' + id);
 	
-	var id = setInterval(function() {
+	var timeID = setInterval(function() {
 		ws.send('still alive', function() {  })
 	}, 30000)
 
@@ -36,6 +36,7 @@ webSocketServer.on('connection', (ws) => {
 		console.log('message received ' + message);
 		for (var key in clients) {
 			clients[key].send(message);
+			//this.send(message);
 		}
 	});  
   
