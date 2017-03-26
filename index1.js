@@ -2,16 +2,21 @@
 
 const express = require('express');
 const SocketServer = require('ws').Server;
+const path = require('path');
+
 const PORT = process.env.PORT || 3000;
+const INDEX = path.join(__dirname, 'index.html');
+
+var app = express();
+
+app.use(express.static(__dirname + '/'));
 
 const server = express()
-	.get('/',(req, res) => res.sendFile(__dirname + '/index.html'))	
-	.get('/api/items/get', (req, res) => res.send('Items...'))	
-	.get('/api/audit/get', (req, res) => res.send('Audit...'))
+	.use((req, res) => res.sendFile(INDEX) )
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const webSocketServer = new SocketServer({ server });
-const clients = {};
+var clients = {};
 
 webSocketServer.on('connection', (ws) => {
 	var id = +new Date();
@@ -34,5 +39,6 @@ webSocketServer.on('connection', (ws) => {
 			//this.send(message);
 		}
 	});  
+  
 });
  
